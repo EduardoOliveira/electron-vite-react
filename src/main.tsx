@@ -2,7 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { CssVarsProvider } from '@mui/joy/styles';
 import App from './App'
-import './samples/node-api'
 import './index.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { DeviceList } from './core/settings/devices/DeviceList';
