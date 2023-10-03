@@ -2,6 +2,8 @@ import { app, BrowserWindow, shell, ipcMain } from 'electron'
 import { release } from 'node:os'
 import { join } from 'node:path'
 import { update } from './update'
+import { setupWindowEvents } from './windowEvents'
+import { setupDeviceStorage } from './deviceStorage'
 
 // The built directory structure
 //
@@ -44,6 +46,12 @@ const indexHtml = join(process.env.DIST, 'index.html')
 async function createWindow() {
   win = new BrowserWindow({
     title: 'Main window',
+    width: 1300,
+    height: 800,
+    minWidth: 1300,
+    autoHideMenuBar: true,
+    transparent: true, 
+    frame: false,
     icon: join(process.env.VITE_PUBLIC, 'favicon.ico'),
     webPreferences: {
       preload,
@@ -69,13 +77,28 @@ async function createWindow() {
   })
 
   // Make all links open with the browser, not with the application
-  win.webContents.setWindowOpenHandler(({ url }) => {
+  /*win.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith('https:')) shell.openExternal(url)
     return { action: 'deny' }
-  })
+  })*/
+  win.webContents.session.webRequest.onBeforeSendHeaders(
+    (details, callback) => {
+      callback({ requestHeaders: { Origin: '*', ...details.requestHeaders } });
+    },
+  );
 
+  win.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        'Access-Control-Allow-Origin': ['*'],
+        ...details.responseHeaders,
+      },
+    });
+  });
   // Apply electron-updater
   update(win)
+  setupWindowEvents(win, ipcMain);
+  setupDeviceStorage(ipcMain);
 }
 
 app.whenReady().then(createWindow)

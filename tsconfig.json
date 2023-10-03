@@ -17,6 +17,7 @@
     "jsx": "react-jsx",
     "baseUrl": "./",
     "paths": {
+      "@mui/material": ["./node_modules/@mui/joy"],
       "@/*": [
         "src/*"
       ]
