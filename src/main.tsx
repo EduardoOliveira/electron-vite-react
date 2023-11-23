@@ -10,6 +10,7 @@ import { Error404 } from './core/general/404';
 import DevicesService from './core/settings/devices/DevicesService';
 import { ApplicationsList } from './applications/ApplicationsList';
 import { EditPomodoro } from './applications/pomodoro/components/Edit';
+import { EditFaces } from './applications/faces/components/Edit';
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
       {
         path: "applications/pomodoro",
         element: <EditPomodoro />,
+      },
+      {
+        path: "applications/faces",
+        element: <EditFaces />,
       }
 
     ]
